@@ -5,12 +5,16 @@ from datetime import date
 
 st.set_page_config(page_title="Gestion Immo Nomade", layout="wide")
 
-# Connexion simplifiée qui va chercher l'URL dans les Secrets
+# C'est exactement votre ID de document :
+URL_SHEET = "https://docs.google.com/spreadsheets/d/10BCCMOjBFSN93w4xwUmlIfc_ejR6m6Cib7JVsQOY1n8"
+
 conn = st.connection("gsheets", type=GSheetsConnection)
 
 def load_data(sheet_name):
-    # ttl=0 force l'appli à lire les vraies données à chaque rafraîchissement
-    return conn.read(worksheet=sheet_name, ttl=0)
+    # On force l'URL ici pour que Streamlit ne se trompe jamais
+    return conn.read(spreadsheet=URL_SHEET, worksheet=sheet_name, ttl=0)
+
+# ... le reste du code (chargement des données, menus, etc.) reste identique
 
 # Chargement
 try:

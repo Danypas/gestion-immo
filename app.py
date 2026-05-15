@@ -5,20 +5,21 @@ from datetime import date
 
 st.set_page_config(page_title="Gestion Immo Nomade", layout="wide")
 
-# Connexion directe au Google Sheet
-conn = st.connection("gsheets", type=GSheetsConnection, spreadsheet="https://docs.google.com/spreadsheets/d/10BCCMOjBFSN93w4xwUmlIfc_ejR6m6Cib7JVsQOY1n8")
+# Connexion simplifiée qui va chercher l'URL dans les Secrets
+conn = st.connection("gsheets", type=GSheetsConnection)
 
 def load_data(sheet_name):
+    # ttl=0 force l'appli à lire les vraies données à chaque rafraîchissement
     return conn.read(worksheet=sheet_name, ttl=0)
 
-# Chargement des données
+# Chargement
 try:
     biens = load_data('Parametrage_Biens')
     locs = load_data('Suivi_Locations')
     charges = load_data('Charges_Structure')
     listes = load_data('Listes')
 except Exception as e:
-    st.error(f"Erreur de lecture du Google Sheet : {e}")
+    st.error(f"Connexion impossible. Vérifiez l'URL dans vos Secrets. Erreur : {e}")
     st.stop()
 
 st.sidebar.title("🏠 Menu Nomade")

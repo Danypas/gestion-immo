@@ -14,14 +14,15 @@ def load_data(sheet_name):
     # On force la lecture via l'URL directe pour éviter les erreurs de configuration
     return conn.read(spreadsheet=URL_SHEET, worksheet=sheet_name, ttl=0)
 
-# Chargement initial des données
+# Chargement initial des données (Vérifiez bien l'orthographe ici)
 try:
     biens = load_data('Parametrage_Biens')
     locs = load_data('Suivi_Locations')
     charges = load_data('Charges_Structure')
     listes = load_data('Listes')
+    fiscale = load_data('Synthese_Fiscale') # L'onglet qui posait problème
 except Exception as e:
-    st.error(f"Erreur de connexion au Google Sheet : {e}")
+    st.error(f"Erreur : Impossible de trouver un onglet. Vérifiez l'orthographe. Détail : {e}")
     st.stop()
 
 st.sidebar.title("🏠 Menu Nomade")

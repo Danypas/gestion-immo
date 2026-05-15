@@ -18,19 +18,19 @@ def load_sheet(name):
 # TENTATIVE DE CHARGEMENT
 try:
     with st.spinner('Connexion au Google Sheet en cours...'):
-        # On charge les onglets un par un
-        df_biens = load_sheet('Parametrage_Biens')
-        df_locs = load_sheet('Suivi_Locations')
-        df_charges = load_sheet('Charges_Structure')
-        df_listes = load_sheet('Listes')
+        # On met un # devant les autres pour tester UNIQUEMENT la synthèse
+        # df_biens = load_sheet('Parametrage_Biens')
+        # df_locs = load_sheet('Suivi_Locations')
+        # df_charges = load_sheet('Charges_Structure')
+        # df_listes = load_sheet('Listes')
+        
+        # C'est cette ligne qui doit fonctionner :
         df_synthese = load_sheet('Synthese_Fiscale')
     
     st.success("✅ Données chargées avec succès !")
     
-    # AFFICHAGE DE TEST POUR VOIR SI ÇA MARCHE
     st.subheader("Aperçu de la Synthèse Fiscale")
     st.write(df_synthese)
 
 except Exception as e:
     st.error(f"Erreur de connexion : {e}")
-    st.info("Vérifiez que l'onglet 'Synthese_Fiscale' existe bien et que le partage est sur 'Tous les utilisateurs disposant du lien'.")

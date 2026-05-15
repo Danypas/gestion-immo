@@ -6,7 +6,7 @@ from datetime import date
 st.set_page_config(page_title="Gestion Immo Nomade", layout="wide")
 
 # C'est exactement votre ID de document :
-URL_SHEET = "https://docs.google.com/spreadsheets/d/10BCCMOjBFSN93w4xwUmlIfc_ejR6m6Cib7JVsQOY1n8"
+URL_SHEET = "https://docs.google.com/spreadsheets/d/10BCCMOjBFSN93w4xwUmlIfc_ejR6m6Cib7JVsQOY1n8/edit?usp=sharing"
 
 conn = st.connection("gsheets", type=GSheetsConnection)
 

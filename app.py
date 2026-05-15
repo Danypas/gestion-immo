@@ -5,11 +5,10 @@ from datetime import date
 
 st.set_page_config(page_title="Gestion Immo Nomade", layout="wide")
 
-# Voici la ligne 9 modifiée (tout le reste autour ne change pas)
+# Connexion directe au Google Sheet
 conn = st.connection("gsheets", type=GSheetsConnection, spreadsheet="https://docs.google.com/spreadsheets/d/10BCCMOjBFSN93w4xwUmlIfc_ejR6m6Cib7JVsQOY1n8")
 
 def load_data(sheet_name):
-    # On force le rafraîchissement à chaque chargement pour voir les nouvelles lignes
     return conn.read(worksheet=sheet_name, ttl=0)
 
 # Chargement des données
@@ -19,7 +18,7 @@ try:
     charges = load_data('Charges_Structure')
     listes = load_data('Listes')
 except Exception as e:
-    st.error(f"Erreur de connexion : {e}")
+    st.error(f"Erreur de lecture du Google Sheet : {e}")
     st.stop()
 
 st.sidebar.title("🏠 Menu Nomade")
@@ -27,7 +26,6 @@ page = st.sidebar.radio("Aller vers", ["Tableau de Bord", "Nouvelle Location", "
 
 if page == "Tableau de Bord":
     st.title("📊 Synthèse Immobilière")
-    # Utilisation des noms exacts de votre capture d'écran
     ca = pd.to_numeric(locs['CA Perçu (€)'], errors='coerce').sum()
     frais = pd.to_numeric(locs['Frais de Gestion (€)'], errors='coerce').sum()
     struct = pd.to_numeric(charges['Montant (€)'], errors='coerce').sum()
@@ -49,22 +47,17 @@ elif page == "Nouvelle Location":
         d1 = st.date_input("Début", date.today())
         d2 = st.date_input("Fin", date.today())
         val = st.number_input("Montant perçu (€)", min_value=0.0)
-        gest = st.number_input("Frais de gestion associés (€)", min_value=0.0)
+        gest = st.number_input("Frais de gestion (€)", min_value=0.0)
         
         if st.form_submit_button("Valider l'enregistrement"):
-            # Création de la ligne avec les noms EXACTS de votre capture
             new_row = pd.DataFrame([{
-                "Bien": b, 
-                "Locataire": l, 
-                "Date Début": str(d1),
-                "Date Fin": str(d2), 
-                "CA Perçu (€)": val, 
-                "Frais de Gestion (€)": gest
+                "Bien": b, "Locataire": l, "Date Début": str(d1),
+                "Date Fin": str(d2), "CA Perçu (€)": val, "Frais de Gestion (€)": gest
             }])
             updated_df = pd.concat([locs, new_row], ignore_index=True)
             conn.update(worksheet="Suivi_Locations", data=updated_df)
             st.cache_data.clear()
-            st.success("C'est enregistré dans Google Sheets !")
+            st.success("Enregistré dans Google Sheets !")
             st.balloons()
 
 elif page == "Nouvelle Charge":
@@ -76,10 +69,7 @@ elif page == "Nouvelle Charge":
         
         if st.form_submit_button("Enregistrer la charge"):
             new_charge = pd.DataFrame([{
-                "Bien": b_c, 
-                "Catégorie": cat, 
-                "Montant (€)": mont, 
-                "Date": str(date.today())
+                "Bien": b_c, "Catégorie": cat, "Montant (€)": mont, "Date": str(date.today())
             }])
             updated_charges = pd.concat([charges, new_charge], ignore_index=True)
             conn.update(worksheet="Charges_Structure", data=updated_charges)

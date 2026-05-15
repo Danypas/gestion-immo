@@ -4,7 +4,7 @@ from streamlit_gsheets import GSheetsConnection
 st.set_page_config(page_title="Test Connexion")
 
 # Votre URL directe
-url = "https://docs.google.com/spreadsheets/d/10BCCMOjBFSN93w4xwUmlIfc_ejR6m6Cib7JVsQOY1n8"
+url = "https://docs.google.com/spreadsheets/d/10BCCMOjBFSN93w4xwUmlIfc_ejR6m6Cib7JVsQOY1n8/edit#gid=0"
 
 st.title("🔌 Test de Connexion")
 

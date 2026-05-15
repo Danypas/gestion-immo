@@ -6,7 +6,7 @@ from datetime import date
 st.set_page_config(page_title="Gestion Immo Nomade", layout="wide")
 
 # Connexion au Google Sheet
-conn = st.connection("gsheets", type=GSheetsConnection)
+conn = st.connection("gsheets", type=GSheetsConnection, spreadsheet="https://docs.google.com/spreadsheets/d/10BCCMOjBFSN93w4xwUmlIfc_ejR6m6Cib7JVsQOY1n8")
 
 def load_data(sheet_name):
     # On force le rafraîchissement à chaque chargement pour voir les nouvelles lignes
